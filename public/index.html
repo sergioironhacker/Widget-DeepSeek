@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="./assets/css/styles.css" />
+    <script src="./assets/js/main.js" defer></script>
+    <link rel="icon" type="image/png" href="./assets/img/estrella.png" />
+    <title>Widget generdor de publicaciones</title>
+</head>
+
+<body>
+
+    <header class="widget__header">
+        <div class="header__icon-container">
+            <img class="header__icon" src="./assets/img/estrella.png" alt="icono de widget" />
+            <span class="header__glow"></span>
+        </div>
+        <div class="header__title-container">
+            <h1 class="header__title">Widget generdor de publicaciones <span class="highlight-pink">(DeepSeek)</span></h1>
+            <p class="header__subtitle">Crea y comparte al instante</p>
+        </div>
+    </header>
+
+    <section class="widget">
+
+        <textarea class="widget_textarea" placeholder="Escribe algo..." maxlength="170"></textarea>
+
+        <div class="widget__buttons">
+            <button class="widget__button widget__button--ia">⭐ </button>
+            <button class="widget__button widget__button--public">Publicar</button>
+        </div>
+
+        <section class="widget__posts"></section>
+
+    </section>
+
+</body>
+
+</html>
