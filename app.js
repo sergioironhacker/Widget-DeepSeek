@@ -8,42 +8,66 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use("/", express.static("public"));
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
+  baseURL: "https://api.deepseek.com",
+  apiKey: process.env.DEEPSEEK_API_KEY
 });
 
-app.post('/api/traducir', async (req, res) => {
-  const { text, targetLang } = req.body;
-
-  // Pasamos targetLang a minúsculas para evitar problemas
-  const cleanLang = targetLang.toLowerCase();
-
-  const promtSystem1 = "Eres un traductor profesional";
-  const promtSystem2 = "Solo puedes responder con una traducción directa del texto que te escriba el usuario. Cualquier otra respuesta está prohibida.";
-  const promtUser = `Traduce el siguiente texto al ${cleanLang}: ${text}`;
+app.post("/api/generate-post", async (req, res) => {
+  const { userPreferences } = req.body;
 
   try {
+    const promptSystem = `
+Eres un experto en redes sociales que genera textos creativos y originales.
+Basado en las preferencias del usuario, crea 5 publicaciones originales con máximo 177 caracteres cada una.
+Incluye humor ácido, datos curiosos o divulgativos y alterna estilos.
+Devuelve SOLO un JSON válido con la propiedad "posts" que sea un array con los textos planos, sin numeraciones, símbolos extras ni texto fuera del JSON.
+Ejemplo:
+{
+  "posts": [
+    "Texto 1...",
+    "Texto 2...",
+    "Texto 3...",
+    "Texto 4...",
+    "Texto 5..."
+  ]
+}
+`;
+
     const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: "deepseek-chat",
       messages: [
-        { role: "system", content: promtSystem1 },
-        { role: "system", content: promtSystem2 },
-        { role: "user", content: promtUser },
+        { role: "system", content: promptSystem },
+        { role: "user", content: userPreferences }
       ],
-      max_tokens: 500
+      max_tokens: 300
     });
 
-    const translatedText = completion.choices[0].message.content.trim();
+    const responseText = completion.choices[0].message.content;
 
-    return res.status(200).json({ translatedText });
+    // Extraer JSON del texto
+    const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      return res.status(500).json({ error: "No se pudo extraer JSON válido de la respuesta." });
+    }
+
+    let jsonData;
+    try {
+      jsonData = JSON.parse(jsonMatch[0]);
+    } catch {
+      return res.status(500).json({ error: "JSON mal formado en la respuesta." });
+    }
+
+    return res.json(jsonData);
 
   } catch (error) {
-    console.error("Error en la traducción:", error);
-    return res.status(500).json({ error: "Error al traducir" });
+    console.error(error);
+    return res.status(500).json({
+      error: "Error generando publicación"
+    });
   }
 });
 

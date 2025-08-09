@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./assets/css/styles.css" />
     <script src="./assets/js/main.js" defer></script>
     <link rel="icon" type="image/png" href="./assets/img/estrella.png" />
-    <title>Widget generdor de publicaciones</title>
+    <title>Widget generador de publicaciones</title>
 </head>
 
 <body>
@@ -18,23 +18,33 @@
             <span class="header__glow"></span>
         </div>
         <div class="header__title-container">
-            <h1 class="header__title">Widget generdor de publicaciones <span class="highlight-pink">(DeepSeek)</span></h1>
+            <h1 class="header__title">Widget generador de publicaciones <span class="highlight-pink">(DeepSeek)</span></h1>
             <p class="header__subtitle">Crea y comparte al instante</p>
         </div>
     </header>
 
     <section class="widget">
 
-        <textarea class="widget_textarea" placeholder="Escribe algo..." maxlength="170"></textarea>
+        <textarea class="widget__textarea" placeholder="Escribe algo..." maxlength="170"></textarea>
 
         <div class="widget__buttons">
-            <button class="widget__button widget__button--ia">⭐ </button>
+            <button class="widget__button widget__button--ia">⭐ Generar con IA</button>
             <button class="widget__button widget__button--public">Publicar</button>
         </div>
 
         <section class="widget__posts"></section>
 
     </section>
+
+    <footer class="widget__footer">
+        <p>
+            Creado por Sergio &nbsp;
+            <a href="https://www.linkedin.com/in/sergioeandres" target="_blank" rel="noopener noreferrer" class="linkedin-link">
+                www.linkedin.com/in/sergioeandres
+                <sup>®</sup>
+            </a>
+        </p>
+    </footer>
 
 </body>
 
